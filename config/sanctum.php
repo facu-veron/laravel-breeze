@@ -34,7 +34,8 @@ return [
     |
     */
 
-    'guard' => ['web'],
+    /* 'guard' => ['web'], */
+    'guard' => ['api'],
 
     /*
     |--------------------------------------------------------------------------
@@ -47,7 +48,8 @@ return [
     |
     */
 
-    'expiration' => null,
+   /*  'expiration' => null, */
+    'expiration' => 60,
 
     /*
     |--------------------------------------------------------------------------
@@ -74,11 +76,16 @@ return [
     | request. You may change the middleware listed below as required.
     |
     */
-
-    'middleware' => [
-        'authenticate_session' => Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
+    
+    /* 'middleware' => [
+        // 'authenticate_session' => Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
         'encrypt_cookies' => Illuminate\Cookie\Middleware\EncryptCookies::class,
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+    ], */
+
+    'middleware' => [
+        'verify_csrf_token' => App\Http\Middleware\VerifyCsrfToken::class,
+        'encrypt_cookies' => App\Http\Middleware\EncryptCookies::class,
     ],
 
 ];

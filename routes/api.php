@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -8,8 +9,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    Route::post('/register', [RegisteredUserController::class, 'store'])
+// Rutas públicas (no requieren autenticación)
+Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest')
     ->name('register');
 
@@ -33,10 +34,12 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
     ->middleware(['auth', 'throttle:6,1'])
     ->name('verification.send');
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+// Rutas protegidas (requieren autenticación)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
-
-
-
